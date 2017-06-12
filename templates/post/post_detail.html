@@ -1,0 +1,8 @@
+{% extends 'post/base.html' %}
+
+{% block content %}
+
+<a href="{% url 'post_detail' post_pk=post.pk %}"></a>
+<img src="{{post.photo.url}}" alt="">
+
+{% endblock %}

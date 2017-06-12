@@ -1,23 +1,24 @@
+from django.conf import settings
 from django.db import models
 
-from django.contrib.auth.models import User
 
 
 # Create your models here.
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
     create_date = models.DateTimeField(auto_now_add=True)
     modify_date = models.DateTimeField(auto_now_add=True)
-    photo = models.ImageField(blank=True)
+    photo = models.ImageField(upload_to='post',blank=True)
     like_users = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         related_name='like_posts',
         through='PostLike',
     )
     tags = models.ManyToManyField(
         'Tag',
+        blank=True,
     )
 
     def add_comment(self, user, content):
@@ -35,12 +36,12 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True)
     modify_date = models.DateTimeField(auto_now=True)
     content = models.TextField()
     like_users = models.ManyToManyField(
-        User,
+        settings.AUTH_USER_MODEL,
         through='CommentLike',
         related_name='like_comments',
     )
@@ -48,13 +49,13 @@ class Comment(models.Model):
 
 class CommentLike(models.Model):
     comment = models.ForeignKey(Comment)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_date = models.DateTimeField(auto_now_add=True)
 
 
 class PostLike(models.Model):
     post = models.ForeignKey(Post)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     create_date = models.DateTimeField(auto_now_add=True)
 
     # class Meta:

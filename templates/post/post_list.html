@@ -1,0 +1,16 @@
+{% extends 'post/base.html' %}
+
+{% block content %}
+<!--<form action="" method="POST">-->
+    <!--<button type="submit">+add</button>-->
+    <!--{% csrf_token %}-->
+<!--</form>-->
+
+{% for post in posts %}
+
+<div>
+    <span>{{post.id}}</span><br>
+    <img src="{{post.photo.url}}" alt=""><br>
+</div>
+    {% endfor %}
+{% endblock %}
