@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -13,18 +12,6 @@ from .models import Post
 
 User = get_user_model()
 
-=======
-from django.http import HttpResponse
-from django.shortcuts import render
-
-# Create your views here.
-from .models import Post
-
-
-# def index(request):
-#     return HttpResponse('hello world!')
-
->>>>>>> origin/master
 
 def post_list(request):
     posts = Post.objects.all()
@@ -32,7 +19,6 @@ def post_list(request):
         'posts': posts,
     }
     return render(request, 'post/post_list.html', context)
-<<<<<<< HEAD
 
 
 def post_detail(request, post_pk):
@@ -104,5 +90,3 @@ def comment_modify(request, post_pk):
 def comment_delete(request, post_pk, comment_pk):
     # Post요청을 받아 commnet 객체를 delete, 이후 post_detail페이지로 redirect
     pass
-=======
->>>>>>> origin/master
