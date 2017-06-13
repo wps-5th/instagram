@@ -4,11 +4,7 @@
 
 
 {% for post in posts %}
-
-<div>
-    <span>{{post.id}}</span><br>
-    <img src="{{post.photo.url}}" alt=""><br>
-</div>
-    {% endfor %}
+{% include 'include/post.html' %}
+{% endfor %}
 
 {% endblock %}
