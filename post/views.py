@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.template import loader
+
 from member.models import User
 from post.form import PostCreate, PostModify
 from .models import Post
@@ -22,12 +24,29 @@ def post_list(request):
 
 
 def post_detail(request, post_pk):
-    # post_pk 에 해당하는 Post 객체를 리턴
-    posts = Post.objects.get(post_pk=post_pk)
+    # 가져오는 과정에서 예외처리를 한다 (Model.DeosNotExist)
+    try:
+        post = Post.objects.get(pk=post_pk)
+    except Post.DoesNotExist as e:
+        # return HttpResponseNotFound(‘Post not found, detail: {}‘.format(e))
+        return redirect('post:post_list')
+
+        # render함수는 django.template.loader.get_template함수와
+        # django.http.HttpResponse함수를 축약해 놓은 shortcut이다
+
+        # Django가 템플릿을 검색할 수 있는 모든 디렉토리를 순회하며
+    # 인자로 주어진 문자열값과 일치하는 템플릿이 있는 지 확인 후
+    # 결과를 리턴 (django.template.backends.dkango.Template
+    template = loader.get_template('post/post_detail.html')
+
+    # dict형 변수 context ‘post’키에 post(Post 객체를 할당
     context = {
-        'posts': posts
+        'post': post,
     }
-    return render(request, 'post/post_detail.html', context)
+
+
+    rendered_string = template.render(context=context, request=request)
+    return HttpResponse(rendered_string)
 
 
 def post_create(request):
@@ -37,7 +56,7 @@ def post_create(request):
         context = {
             'form': form,
         }
-        return render(request, 'post/post_create.html', context)
+        return render(request, 'post:post_create.html', context)
 
     elif request.method == 'POST':
         form = PostCreate(request.POST, request.FILES)
@@ -47,12 +66,12 @@ def post_create(request):
                 author=user,
                 photo=request.FILES['photo'],
             )
-            return redirect('post/post_create.html')
+            return redirect('post:post_create.html')
         else:
             context = {
                 'form': form,
             }
-            return render(request, 'post/post_list.html', context)
+            return render(request, 'post:post_list.html', context)
 
 
 def post_modify(request, post_pk):
@@ -63,7 +82,7 @@ def post_modify(request, post_pk):
         context = {
             'form': form,
         }
-        return render(request, 'post/post_modify.html', context)
+        return render(request, 'post:post_modify.html', context)
     elif request.method == 'POST':
         form = PostModify(request.POST, request.FILES)
         if form.is_valid():

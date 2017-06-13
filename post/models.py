@@ -2,7 +2,6 @@ from django.conf import settings
 from django.db import models
 
 
-
 # Create your models here.
 
 
@@ -10,7 +9,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
     create_date = models.DateTimeField(auto_now_add=True)
     modify_date = models.DateTimeField(auto_now_add=True)
-    photo = models.ImageField(upload_to='post',blank=True)
+    photo = models.ImageField(upload_to='post', blank=True)
     like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='like_posts',

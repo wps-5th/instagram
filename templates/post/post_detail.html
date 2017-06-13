@@ -1,8 +1,18 @@
-{% extends 'post/base.html' %}
+{% extends 'common/base.html' %}
 
 {% block content %}
 
-<a href="{% url 'post_detail' post_pk=post.pk %}"></a>
-<img src="{{post.photo.url}}" alt="">
+
+<img src="{{ post.photo.url }}" alt="">
+<span>{{ post.author }}</span> <br>
+<span>{{ post.like_count }}</span> <br>
+{% if post.comment_set.all %}
+{% for comment in post.comment_set.all %}
+
+<div>{{ comment.content }}</div> <br>
+{% endfor %}
+{% else %}
+<div>댓글이 없습니다</div>
+{% endif %}
 
 {% endblock %}
