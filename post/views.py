@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.template import loader
+from django.urls import reverse
 
 from member.models import User
 from post.form import PostCreate, PostModify
@@ -29,7 +30,10 @@ def post_detail(request, post_pk):
         post = Post.objects.get(pk=post_pk)
     except Post.DoesNotExist as e:
         # return HttpResponseNotFound(‘Post not found, detail: {}‘.format(e))
-        return redirect('post:post_list')
+        # return redirect('post:post_list')
+
+        url = reverse('post:post_list')
+        return HttpResponseRedirect(url)  # 위에 쓴 return redirect 와 같은 의미
 
         # render함수는 django.template.loader.get_template함수와
         # django.http.HttpResponse함수를 축약해 놓은 shortcut이다
@@ -44,34 +48,49 @@ def post_detail(request, post_pk):
         'post': post,
     }
 
-
     rendered_string = template.render(context=context, request=request)
     return HttpResponse(rendered_string)
 
 
 def post_create(request):
     # POST 요청을 받아 Post 객체를 생성 후 post_list 페이지로 redirect
-    if request.method == 'GET':
-        form = PostCreate()
-        context = {
-            'form': form,
-        }
-        return render(request, 'post:post_create.html', context)
+    # if request.method == 'GET':
+    #     form = PostCreate()
+    #     context = {
+    #         'form': form,
+    #     }
+    #     return render(request, 'post:post_create.html', context)
+    #
+    # elif request.method == 'POST':
+    #     form = PostCreate(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         user = User.objects.first()
+    #         Post.objects.create(
+    #             author=user,
+    #             photo=request.FILES['photo'],
+    #         )
+    #         return redirect('post:post_create.html')
+    #     else:
+    #         context = {
+    #             'form': form,
+    #         }
+    #         return render(request, 'post:post_list.html', context)
 
-    elif request.method == 'POST':
-        form = PostCreate(request.POST, request.FILES)
-        if form.is_valid():
-            user = User.objects.first()
-            Post.objects.create(
+    if request.method == 'POST':
+        user = User.objects.first()
+        post = Post.objects.create(
+            author=user,
+            photo=request.FILES['file']
+        )
+        comment_string = request.POST.get('comment', '')
+        if comment_string:
+            post.comment_set.create(
                 author=user,
-                photo=request.FILES['photo'],
+                content=comment_string,
             )
-            return redirect('post:post_create.html')
-        else:
-            context = {
-                'form': form,
-            }
-            return render(request, 'post:post_list.html', context)
+        return redirect('post:post_detail', post_pk=post.pk)
+    else:
+        return render(request, 'post/post_create.html')
 
 
 def post_modify(request, post_pk):

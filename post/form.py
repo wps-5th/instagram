@@ -11,4 +11,4 @@ class PostCreate(forms.Form):
 
 
 class PostModify(forms.Form):
-    commnet = forms.CharField(max_length=50)
+    comment = forms.CharField(max_length=50)

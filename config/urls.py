@@ -26,7 +26,6 @@ from post import views as post_views
 from post import views as post_views
 
 urlpatterns = [
-    # url(r'^post/', post_views.index),
     url(r'^admin/', admin.site.urls),
     url(r'^post/', include('post.urls')),
 ]
