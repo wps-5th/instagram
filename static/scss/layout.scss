@@ -1,15 +1,15 @@
+@import 'variables';
 
 $screen-tablet:700px;
 $header-height:83px;
 header.top-header{
-  height: $header-height;
-  padding: 0 10px;
-  border-bottom: 1px solid rgba(0,0,0,.0975);
+  border-bottom: 1px solid $color-border;
 }
 
-header.top-header > nav {
+header.top-header > nav:nth-child(1) {
   max-width: 1010px;
   margin: 0 auto;
+  padding: 10px;
   height: $header-height;
 
   .nav-item {
@@ -51,7 +51,16 @@ header.top-header > nav {
       padding: 0 10px;
     }
   }
-
+}
+  header.top-header > nav:nth-child(2) {
+    border-top: 1px solid $color-border;
+    padding: 4px;
+    text-align: right;
+    
+    > div {
+      max-width: 1010px;
+      margin: 0 auto;
+    }
 }
 
 .container{
@@ -60,6 +69,5 @@ header.top-header > nav {
   padding-top:40px;
   @media screen and (max-width: $screen-tablet){
     padding-top:0;
+    }
   }
-
-}

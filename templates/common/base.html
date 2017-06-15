@@ -8,16 +8,15 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <title>Instagram</title>
 </head>
 <body>
-
-
 <div id="wrap">
   <header class="top-header">
     <nav>
       <div class="nav-left nav-item">
-        <a href="#">
+        <a href="{% url 'post:post_list' %}">
           <img src="{% static 'images/logo.png' %}" alt="">
         </a>
       </div>
@@ -35,15 +34,29 @@
           <img src="{% static 'images/icon_profile.png' %}" alt="">
         </a>
       </div>
-
+    </nav>
+    <nav>
+      {% if user.is_authenticated %}
+        <span>{{ user }} 가 로그인 중입니다.</span>
+        <a href="{% url 'member:logout' %}" class='btn'>로그아웃</a>
+      {% else %}
+        <a href="{% url 'member:login' %}" class='btn'>로그인</a>
+      {% endif %}
     </nav>
   </header>
+
+<!-- <div class="test">
+  {% if user.is_authenticated %}
+    {{ user }} 가 로그인 중입니다.
+  {% else %}
+    로그인하세요.
+  {% endif %}
+</div> -->
+
   <div class="container">
     {% block content %}
     {% endblock %}
   </div>
-
 </div>
-
 </body>
 </html>
