@@ -1,0 +1,22 @@
+{% extends common/base.html %}
+
+{% content block %}
+<div>
+    <title>signup page</title>
+    <form action="" method="POST">
+        <div>
+            <label for="id-username">Username</label>
+            <input id="id-username" type="text" placeholder="username">
+        </div>
+        <div>
+            <label for="id-password1">Password1</label>
+            <input id="password1" type="text" placeholder="password1">
+        </div>
+        <div>
+            <label for="id-password2">Password2</label>
+            <input id="password2" type="text" placeholder="password2">
+        </div>
+        <button type="submit">가입하기</button>
+    </form>
+</div>
+{% endblock %}

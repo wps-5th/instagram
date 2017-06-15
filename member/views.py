@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 # from member.models import User
 # from post.models import Post
+from member.models import User
 
 
 def login(request):
@@ -38,3 +39,19 @@ def login(request):
 def logout(request):
     django_logout(request)
     return redirect('post:post_list')
+
+
+def signup(request):
+    if request.method == 'POST':
+        username=request.POST['user']
+        password1=request.POST['password']
+        password2=request.POST['password']
+
+        if User.objects.get() == username:
+            return HttpResponse('다른 이름을 사용하세요')
+
+    else:
+        return render(request, 'member/signup.html')
+
+
+    pass
