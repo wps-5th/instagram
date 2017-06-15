@@ -6,8 +6,7 @@
         <!--<span>{{ User.username }}</span>-->
         <form action="" method="POST">
             {% csrf_token %}
-            <input type="text" name="username">
-            <input type="password" name="password">
+            {{ form }}
             <button type="submit">생성</button>
         </form>
     </div>

@@ -39,9 +39,16 @@
       {% if user.is_authenticated %}
         <span>{{ user }} 가 로그인 중입니다.</span>
         <a href="{% url 'member:logout' %}" class='btn'>로그아웃</a>
-      {% else %}
-        <a href="{% url 'member:login' %}" class='btn'>로그인</a>
-      {% endif %}
+
+      <div>
+        {% else %}
+        <form action="" method="POST">
+          {% csrf_token %}
+          {{ form }}
+          <button type="submit"><a href="{% url 'member:login' %}">login</a></button>
+        </form>
+        {% endif %}
+      </div>
     </nav>
   </header>
 

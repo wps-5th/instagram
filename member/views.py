@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 # from member.models import User
 # from post.models import Post
+from member.foms import LoginForm
 from member.models import User
 
 User = get_user_model()
@@ -20,22 +21,33 @@ def login(request):
     # username = request.User.get('User','')
     # password = User.objects.get()
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(
-            request,
-            username=username,
-            password=password,
-        )
-        if user is not None:
+        # username = request.POST['username']
+        # password = request.POST['password']
+        # user = authenticate(
+        #     request,
+        #     username=username,
+        #     password=password,
+        # )
+        #
+        # if user is not None:
+        #     django_login(request, user)
+
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['user']
             django_login(request, user)
             return redirect('post:post_list')
+
         else:
             return HttpResponse('Login credentials invalid')
     else:
         if request.user.is_authenticated:
             return redirect('post:post_list')
-        return render(request, 'member/login.html')
+    form = LoginForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'post/post_list.html', context)
 
 
 def logout(request):

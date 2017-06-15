@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login as django_login
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.urls import reverse
 
+from member.foms import LoginForm
 from member.models import User
 from post.form import PostCreate, PostModify
 from .models import Post
@@ -18,10 +19,23 @@ User = get_user_model()
 
 def post_list(request):
     posts = Post.objects.all()
-    context = {
-        'posts': posts,
-    }
+    form = LoginForm(data=request.POST)
+    if form.is_valid():
+        user = form.cleaned_data['user']
+        django_login(request, user)
+        return redirect('post:post_list')
+    else:
+        form = LoginForm()
+        context = {
+            'posts': posts,
+            'form': form,
+        }
+
     return render(request, 'post/post_list.html', context)
+
+
+
+
 
 
 def post_detail(request, post_pk):
