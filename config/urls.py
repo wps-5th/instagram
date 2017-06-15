@@ -28,6 +28,7 @@ from post import views as post_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^post/', include('post.urls')),
+    url(r'^member/', include('member.urls')),
 ]
 urlpatterns += static(
     prefix=settings.MEDIA_URL,
