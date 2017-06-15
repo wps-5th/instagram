@@ -106,13 +106,14 @@ def post_modify(request, post_pk):
         form = PostModify(request.POST, request.FILES)
         if form.is_valid():
             post.photo = request.FILES['photo']
-            return redirect('detail', post.pk)
+            return redirect('post_detail', post.pk)
 
 
 def post_delete(request, post_pk):
-    # post_pk 에 해당하는 Post에 대한 delete 요청만 받음
-    # 처리완료후에는 post_list 페이지로 redirect
-    pass
+    post = Post.objects.get(pk=post_pk)
+    if request.method == 'POST':
+        post.delete()
+    return redirect('post:post_list')
 
 
 def comment_create(request, post_pk):
